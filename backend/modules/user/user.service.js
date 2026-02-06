@@ -1,3 +1,4 @@
+import { Op, where } from "sequelize";
 import { User } from "../../modals/index.js"
 
 export const addUserService=async(data)=>{
@@ -12,5 +13,38 @@ export const addUserService=async(data)=>{
             statusCode:400,
             message:error.message
         }
+    }
+}
+export const getUserService=async()=>{
+    try {
+        // const result=await User.findByPk(4);
+        const result=await User.findAll();
+        return {statusCode:200,result}
+    } catch (error) {
+        return {statusCode:400,message:error.message}
+    }
+}
+export const updateUserService=async(id,data)=>{
+    const user=await User.findByPk(id);
+    if(!user){
+        return {statusCode:400,message:"User not found"}
+    }
+    try {
+        const result=await user.update(data);
+        return {statusCode:200,result}
+    } catch (error) {
+        return {statusCode:400,message:error.message}
+    }
+}
+export const deleteUserService=async(id)=>{
+    const user=await User.findByPk(id);
+    if(!user){
+        return {statusCode:400,message:"User not found"}
+    }
+    try {
+        const result=await user.destroy();
+        return {statusCode:200,result}
+    } catch (error) {
+        return {statusCode:400,message:error.message}
     }
 }
