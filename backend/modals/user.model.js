@@ -1,9 +1,14 @@
 import { DataTypes } from "sequelize";
+import bcrypt from 'bcrypt';
 const userModal = (sequelize) => {
     return sequelize.define('user', {
         name: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            // get(){
+            //     const nameVal=this.getDataValue('name');
+            //     return nameVal ? 'Mr '+nameVal:"Unkonwn"
+            // }
         },
         email: {
             type: DataTypes.STRING,
@@ -12,7 +17,11 @@ const userModal = (sequelize) => {
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            set(value){
+                const hashPassword=bcrypt.hashSync(value,10);
+                this.setDataValue('password',hashPassword);
+            }
         },
         role: {
             type: DataTypes.ENUM('USER','ADMIN','SELLER'),

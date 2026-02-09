@@ -1,6 +1,6 @@
 import { Op, where } from "sequelize";
 import { User } from "../../modals/index.js"
-
+import bcrypt from 'bcrypt';
 export const addUserService=async(data)=>{
     try {
         const result=await User.create(data);
@@ -46,5 +46,40 @@ export const deleteUserService=async(id)=>{
         return {statusCode:200,result}
     } catch (error) {
         return {statusCode:400,message:error.message}
+    }
+}
+export const loginUserService=async(data)=>{
+    try {
+        const {email,password}=data;
+        if(!email || !password){
+            return {
+                statusCode:400,
+                message:"Feild cannot be empty"
+            }
+        }
+        const user=await User.findOne({
+            where:{
+                email:email
+            }
+        })
+        if(!user){
+            return {
+                statusCode:400,
+                message:"User not registered"
+            }
+        }
+        const match=await bcrypt.compare(password,user.password);
+        if(!match){
+            return {
+                statusCode:400,
+                message:"Invalid user"
+            }
+        }
+        return {
+            statusCode:200,
+            result:user
+        }
+    } catch (error) {
+        
     }
 }

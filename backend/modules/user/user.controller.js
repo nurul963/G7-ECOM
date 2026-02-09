@@ -1,4 +1,4 @@
-import { addUserService, deleteUserService, getUserService, updateUserService } from "./user.service.js";
+import { addUserService, deleteUserService, getUserService, loginUserService, updateUserService } from "./user.service.js";
 
 export const addUser=async(req,resp)=>{
     const result=await addUserService(req.body);
@@ -19,4 +19,8 @@ export const deleteUser=async(req,resp)=>{
     const id=req.params.id;
     const result=await deleteUserService(id);
     return resp.status(result.statusCode).json({result})
+}
+export const loginUser=async(req,resp)=>{
+    const result=await loginUserService(req.body);
+    return resp.status(result.statusCode).json(result);
 }
