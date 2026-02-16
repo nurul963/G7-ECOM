@@ -22,5 +22,27 @@ export const deleteUser=async(req,resp)=>{
 }
 export const loginUser=async(req,resp)=>{
     const result=await loginUserService(req.body);
+    if(result && result.token){
+        resp.cookie('token',result.token,{
+            httpOnly:true,
+            secure:false,
+            samesite:"strict",
+            maxAge:60*60*1000
+        })
+        result.token='';
+        return resp.status(result.statusCode).json({
+            id:result.result.id,
+            name:result.result.name,
+            email:result.result.email,
+            role:result.result.role
+        })
+    }
     return resp.status(result.statusCode).json(result);
+}
+export const logoutUser=async(req,resp)=>{
+    resp.clearCookie('token');
+    return resp.status(200).json({
+        statusCode:200,
+        message:"Logout Success"
+    })
 }

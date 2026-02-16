@@ -1,6 +1,8 @@
 import { Op, where } from "sequelize";
 import { User } from "../../modals/index.js"
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { SECERATE_KEY } from "../../util/constant.js";
 export const addUserService=async(data)=>{
     try {
         const result=await User.create(data);
@@ -75,11 +77,18 @@ export const loginUserService=async(data)=>{
                 message:"Invalid user"
             }
         }
+        const id=user.id.toString();
+        const role=user.role;
+        const token=jwt.sign({id,role,email},SECERATE_KEY,{expiresIn:'1hr'})
         return {
             statusCode:200,
-            result:user
+            result:user,
+            token
         }
     } catch (error) {
-        
+        return {
+            statusCode:400,
+            message:error.message
+        }
     }
 }
