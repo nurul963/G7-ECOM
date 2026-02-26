@@ -10,3 +10,6 @@ export const SECERATE_KEY=process.env.SECERATE_KEY;
 export const CLOUDINARY_NAME=process.env.CLOUDINARY_NAME;
 export const CLOUDINARY_API_KEY=process.env.CLOUDINARY_API_KEY;
 export const CLOUDINARY_API_SECERATE=process.env.CLOUDINARY_API_SECERATE;
+export const PG_CLIENT_ID=process.env.PG_CLIENT_ID;
+export const PG_CLIENT_SECERATE=process.env.PG_CLIENT_SECERATE;
+export const API_URL=`${process.env.API_URL}${PORT}/api`
